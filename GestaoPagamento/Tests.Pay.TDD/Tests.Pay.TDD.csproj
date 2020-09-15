@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Command\**" />
+    <Compile Remove="Controller\**" />
+    <EmbeddedResource Remove="Command\**" />
+    <EmbeddedResource Remove="Controller\**" />
+    <None Remove="Command\**" />
+    <None Remove="Controller\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mock\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="xunit.assert" Version="2.4.1" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Pay.Services\Domain.Pay.Services.csproj" />
+    <ProjectReference Include="..\Domain.Pay\Domain.Pay.csproj" />
+    <ProjectReference Include="..\Integration.Pay\Integration.Pay.csproj" />
+    <ProjectReference Include="..\IoC.Pay\IoC.Pay.csproj" />
+    <ProjectReference Include="..\Repository.Pay\Repository.Pay.csproj" />
+  </ItemGroup>
+
+</Project>

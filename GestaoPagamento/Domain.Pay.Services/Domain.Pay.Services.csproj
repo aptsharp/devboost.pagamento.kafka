@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="Flunt" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Pay\Domain.Pay.csproj" />
+    <ProjectReference Include="..\Integration.Pay\Integration.Pay.csproj" />
+    <ProjectReference Include="..\Repository.Pay\Repository.Pay.csproj" />
+  </ItemGroup>
+
+</Project>
