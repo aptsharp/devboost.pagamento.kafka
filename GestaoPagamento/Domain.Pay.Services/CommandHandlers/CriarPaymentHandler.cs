@@ -40,8 +40,8 @@ namespace Domain.Pay.Services.CommandHandlers
             // Chama  WebHook retornando o status do pagamento
             request.Status = 2;
             //await CallWebHook(request);
-            await Envi
-                //TODO terminar
+            await EnviarKafka(request);
+            //TODO terminar
             // retorna a operação para Controller
             return _response;
         }
@@ -56,9 +56,6 @@ namespace Domain.Pay.Services.CommandHandlers
             }
             // Armazena informação da transação de pagamento
             var payment = _mapper.Map<Payment>(request);
-
-            //Payment payment = new Payment(request.PayId, DateTime.Now, request.Name, request.Bandeira, request.NumeroCartao, request.Vencimento,
-            //    request.CodigoSeguranca, request.Valor, request.Status);
 
             await _unitOfWork.PaymentRepository.InsertAsync(payment);
             await _unitOfWork.CommitAsync();
@@ -81,9 +78,9 @@ namespace Domain.Pay.Services.CommandHandlers
             });
         }
 
-        async Task CallWebHook(CriarPaymentCommand request)
+        async Task EnviarKafka(CriarPaymentCommand request)
         {
-            var result = await _webHook.CallPostMethod(new WebHookMethodRequestDto
+            var requesicaoPagamentoDto = new RequesicaoPagamentoDto
             {
                 PayId = request.PayId,
                 CreatedAt = request.CreatedAt,
@@ -94,12 +91,15 @@ namespace Domain.Pay.Services.CommandHandlers
                 CodigoSeguranca = request.CodigoSeguranca,
                 Valor = (decimal)request.Valor,
                 Status = request.Status
-            });
-            if (result.StatusCode != HttpStatusCode.OK)
+            };
+
+            var result = await _enviaPagamentoKafka.SendPay(requesicaoPagamentoDto);
+
+            if(result.Status == Confluent.Kafka.PersistenceStatus.NotPersisted)
             {
-                request.AddNotification("", result.ContentResult);
+                request.AddNotification("", result.Message.Value);
                 _response.AddNotifications(request.Notifications);
-            }
+            }            
         }
     }
 }

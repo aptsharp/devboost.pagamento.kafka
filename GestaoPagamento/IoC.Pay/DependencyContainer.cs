@@ -31,8 +31,14 @@ namespace IoC.Pay
                 options.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()));
         }
 
-        public static void RegisterServices(this IServiceCollection services, bool mock = false)
+        public static void RegisterServices(this IServiceCollection services, IConfiguration configuration, bool mock = false)
         {
+            //as variaveis server para acessar o kafka
+
+            var host = configuration["kafka:host"];
+            var topic = configuration["kafka:topic"];
+            int.TryParse(configuration["kafka:port"], out int port); 
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<IPaymentDbContext, PaymentDbContext>(ServiceLifetime.Scoped);
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -40,6 +46,9 @@ namespace IoC.Pay
             services.AddScoped<ICriarPaymentHandler, CriarPaymentHandler>();
             services.AddScoped<IListarPaymentsHandler, ListarPaymentsHandler>();
             services.AddScoped<IPayAtOperatorService, PayAtOperatorService>();
+
+            //para fazer a injeção de dependencia
+            services.AddScoped<IEnviaPagamentoKafka>(x => new EnviarKafka(host, port, topic));
 
             if (!mock)
                 services.AddScoped<IWebHook, WebHook>();

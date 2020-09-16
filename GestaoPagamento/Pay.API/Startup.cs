@@ -21,7 +21,7 @@ namespace Pay.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.RegisterDbContextSQLServer(Configuration);
-            services.RegisterServices();
+            services.RegisterServices(Configuration);
             services.AddControllers();
             services.AddSwaggerconfiguration(Configuration);
         }
