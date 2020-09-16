@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Test.kafka.Configuracao
 {
-    class Class1
+    class kafkaConfigTest
     {
+
     }
 }

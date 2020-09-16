@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Test.kafka
 {
-    public class UnitTest1
+    public class KafkaProdutorTest
     {
         [Fact]
         public void Test1()

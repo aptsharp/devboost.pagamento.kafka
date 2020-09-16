@@ -19,14 +19,14 @@ namespace Domain.Pay.Services.CommandHandlers
         readonly IUnitOfWork _unitOfWork;
         readonly IMapper _mapper;
         readonly IPayAtOperatorService _payAtOperatorService;
-        readonly IWebHook _webHook;
+        readonly IEnviaPagamentoKafka _enviaPagamentoKafka;
 
-        public CriarPaymentHandler(IUnitOfWork unitOfWork, IMapper mapper, IWebHook webHook, IPayAtOperatorService payAtOperatorService)
+        public CriarPaymentHandler(IUnitOfWork unitOfWork, IMapper mapper, IEnviaPagamentoKafka enviaPagamentoKafka, IPayAtOperatorService payAtOperatorService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _payAtOperatorService = payAtOperatorService;
-            _webHook = webHook;
+            _enviaPagamentoKafka = _enviaPagamentoKafka;
         }
 
         public async Task<ResponseResult> Handle(CriarPaymentCommand request)
@@ -39,7 +39,9 @@ namespace Domain.Pay.Services.CommandHandlers
             await CallMockApi(request);
             // Chama  WebHook retornando o status do pagamento
             request.Status = 2;
-            await CallWebHook(request);
+            //await CallWebHook(request);
+            await Envi
+                //TODO terminar
             // retorna a operação para Controller
             return _response;
         }
