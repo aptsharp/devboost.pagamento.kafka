@@ -9,15 +9,14 @@ namespace Integration.Pay.Service
     public class EnviarKafka : IEnviaPagamentoKafka
     {
         readonly string _host;
-        readonly string _port;
+        readonly int _port;
         readonly string _topic;
 
-        public async Task<DeliveryResult<Null, string host, int port, string topic>> SendPay(RequisicaoPagamento)
+        public EnviarKafka(string host, int port, string topic)
         {
-            _host = _host;
-            _port = _port;
-            _topic = _topic;
-
+            _host = host;
+            _port = port;
+            _topic = topic;
         }
 
         public async Task<DeliveryResult<Null, string>> SendPay(RequesicaoPagamentoDto requesicaoPagamentoDto)
@@ -35,16 +34,11 @@ namespace Integration.Pay.Service
                 _topic,
                 new Message<Null, string>
                 {
-                    Value = ConvertObjectToJson(requestPaymentDto)
+                    Value = ConvertObjectToJson(requesicaoPagamentoDto)
                 }
             );
 
             return result;
-        }
-
-        public Task<DeliveryResult<Null, string>> SendPay(RequesicaoPagamentoDto requisicaoPagamentoDto)
-        {
-            throw new System.NotImplementedException();
         }
 
         private string ConvertObjectToJson(RequesicaoPagamentoDto requesicaoPagamentoDto) =>
